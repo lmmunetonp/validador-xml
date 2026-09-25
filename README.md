@@ -1,0 +1,45 @@
+# 🛡️ Validador de Facturas y Visor XML (Interfaz Web)
+
+Interfaz de usuario moderna y responsiva desarrollada con HTML5 y CSS3 puro (Grid, Flexbox), diseñada específicamente para operar como un panel de control (*dashboard*) de una sola página enfocado en la validación y revisión de documentos fiscales electrónicos.
+
+---
+
+## ✨ Características Principales
+
+* **Panel de Control de Una Sola Página (SPA):** Diseñado con un layout estricto de altura fija (`100vh`) optimizado para evitar scrolls innecesarios en equipos de escritorio, con manejo inteligente de desbordamiento (`overflow`).
+* **Zona de Carga Interactiva (Drag & Drop):** Selector de archivos con estados visuales dinámicos para arrastrar y soltar múltiples comprobantes de manera intuitiva.
+* **Resumen en Tiempo Real (Semáforo de Validación):** Indicadores visuales claros para categorizar los archivos procesados en:
+  * 🔴 **Errores / Inválidos**
+  * 🟡 **Requiere Revisión Manual**
+  * 🟢 **Correctos / Válidos**
+* **Visor XML Integrado (Modal Avanzado):** Un modal a pantalla completa con estética de editor de código oscuro, diseñado con tipografía monoespaciada, barras de herramientas y scroll personalizado para inspeccionar la estructura interna de los archivos.
+* **Diseño 100% Responsivo:** Adaptabilidad fluida implementada mediante *media queries* para asegurar una experiencia de usuario óptima en computadoras de escritorio, tabletas y teléfonos móviles.
+
+---
+
+## 🛠️ Tecnologías y Estándares Utilizados
+
+* **HTML5 Semantic Markup**
+* **CSS3 Moderno:**
+  * CSS Grid & Flexbox para layouts complejos.
+  * Variables de diseño y paletas de colores basadas en estados (éxito, advertencia, error).
+  * Transiciones y animaciones fluidas en modales y botones.
+* **Tipografías y Recursos:** Fuentes estándar optimizadas (`Arial`, `Helvetica`, `sans-serif`) y bloques monoespaciados para código (`Cascadia Code`, `Consolas`, `Monospace`).
+
+---
+
+## 📱 Responsividad y Adaptabilidad
+
+El sistema ajusta automáticamente su distribución según la resolución del dispositivo:
+* **Escritorio (> 900px):** Vista de tres columnas con panel de detalles lateral.
+* **Tabletas (700px - 900px):** Reordenamiento de rejilla en dos columnas.
+* **Móviles (< 700px):** Apilamiento vertical completo de elementos para una interacción táctil cómoda.
+
+---
+
+## 🚀 Uso
+
+Este archivo de estilos (`styles.css` o equivalente) funciona como la capa visual principal para la aplicación web de validación. Para integrarlo en tu proyecto, asegúrate de vincularlo correctamente en la cabecera de tus documentos HTML:
+
+```html
+<link rel="stylesheet" href="ruta/a/tu/styles.css">
