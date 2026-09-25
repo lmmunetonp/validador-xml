@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Validador XML</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/AA.png"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/styles.css"
+    >
+
+</head>
+
+
+<body>
+
+    <main class="container">
+
+        <!-- ==========================================
+             ENCABEZADO
+        =========================================== -->
+
+        <header class="header">
+
+            <div class="header-brand">
+
+                <div class="header-text">
+
+                    <h1>
+                        VALIDADOR XML
+                    </h1>
+
+                    <p>
+                        Sistema de validación de facturas XML
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-actions">
+
+                <button
+                    type="button"
+                    class="validation-rules-button"
+                    id="validationRulesButton"
+                >
+                    <span class="validation-rules-icon">ℹ️</span>
+                    Reglas de validación
+                </button>
+
+
+                <!-- TODO: Agrega aquí tu logotipo genérico o placeholder -->
+                <img
+                    src="/images/logo-placeholder.png"
+                    alt="Logo de la empresa"
+                    class="header-logo"
+                >
+
+            </div>
+
+        </header>
+
+
+        <!-- ==========================================
+             SECCIÓN DE ARCHIVOS
+        =========================================== -->
+
+        <section class="upload-section">
+
+            <h2>
+                Archivos XML
+            </h2>
+
+
+            <form
+                action="/analizar"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <div class="upload-files-grid">
+
+
+                    <!-- ==================================
+                         SELECTOR DE ARCHIVOS
+                    =================================== -->
+
+                    <div class="upload-file-column">
+
+                        <label
+                            class="file-selector"
+                            id="fileSelector"
+                        >
+
+                            <span>
+                                SELECCIONAR ARCHIVOS XML
+                            </span>
+
+
+                            <div class="drop-message">
+
+                                Arrastra y suelta tus archivos XML aquí
+
+                                <br>
+
+                                o presiona
+                                <strong>Ctrl + V</strong>
+                                para pegar
+
+                            </div>
+
+
+                            <input
+                                type="file"
+                                id="xmlFiles"
+                                name="xmlFiles"
+                                accept=".xml,text/xml,application/xml"
+                                multiple
+                                required
+                            >
+
+                        </label>
+
+
+                        <div
+                            id="fileCounter"
+                            class="file-counter"
+                        >
+                            0 archivos seleccionados
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================================
+                         ARCHIVOS SELECCIONADOS
+                    =================================== -->
+
+                    <div class="selected-files-column">
+
+                        <div
+                            id="fileList"
+                            class="file-list"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     BOTONES Y MODO ALMACÉN
+                =================================== -->
+
+                <div class="action-buttons">
+
+                    <button
+                        id="analyzeButton"
+                        class="btn-primary"
+                        type="submit"
+                    >
+                        ANALIZAR XML
+                    </button>
+
+
+                    <button
+                        id="clearButton"
+                        class="btn-clear"
+                        type="button"
+                    >
+                        LIMPIAR
+                    </button>
+
+
+                    <!-- ==================================
+                         MODO ALMACÉN DE MANTENIMIENTO
+                    =================================== -->
+
+                    <label
+                        class="warehouse-checkbox"
+                        for="modoAlmacen"
+                    >
+
+                        <input
+                            type="checkbox"
+                            id="modoAlmacen"
+                            name="modoAlmacen"
+                            value="true"
+                        >
+
+                        <span>
+                            Simular Adquisicion de Mercancias
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- ==========================================
+             RESULTADOS
+        =========================================== -->
+
+        <section class="results-section">
+
+
+            <!-- ==================================
+                 TÍTULO Y RESUMEN
+            =================================== -->
+
+            <div class="results-title">
+
+                <h2>
+                    Resultados
+                </h2>
+
+
+                <div class="results-summary">
+
+
+                    <!-- ANALIZADOS -->
+
+                    <div class="summary-item">
+
+                        <span
+                            id="totalFiles"
+                            class="summary-number"
+                        >
+                            0
+                        </span>
+
+                        <span class="summary-label">
+                            Analizados
+                        </span>
+
+                    </div>
+
+
+                    <!-- CORRECTOS -->
+
+                    <div class="summary-item summary-valid">
+
+                        <span
+                            id="validFiles"
+                            class="summary-number"
+                        >
+                            0
+                        </span>
+
+                        <span class="summary-label">
+                            Correctos
+                        </span>
+
+                    </div>
+
+
+                    <!-- CON ERRORES -->
+
+                    <div class="summary-item summary-invalid">
+
+                        <span
+                            id="invalidFiles"
+                            class="summary-number"
+                        >
+                            0
+                        </span>
+
+                        <span class="summary-label">
+                            Con errores
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================
+                 GRID DE RESULTADOS
+            =================================== -->
+
+            <div class="results-grid">
+
+
+                <!-- ==================================
+                     XML CON ERRORES
+                =================================== -->
+
+                <div class="results-column">
+
+                    <div class="column-header column-header-error">
+
+                        <h3>
+                            ❌ CON ERRORES
+                        </h3>
+
+                        <span
+                            id="errorCount"
+                            class="column-count"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <input
+                        type="text"
+                        id="errorSearch"
+                        class="result-search"
+                        placeholder="Buscar archivo..."
+                        autocomplete="off"
+                    >
+
+
+                    <div
+                        id="errorFiles"
+                        class="result-list"
+                    >
+
+                        <div class="list-empty">
+                            No hay archivos con errores.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     XML CORRECTOS
+                =================================== -->
+
+                <div class="results-column">
+
+                    <div class="column-header column-header-success">
+
+                        <h3>
+                            ✓ CORRECTOS
+                        </h3>
+
+                        <span
+                            id="validCount"
+                            class="column-count"
+                        >
+                            0
+                        </span>
+
+                    </div>
+
+
+                    <input
+                        type="text"
+                        id="validSearch"
+                        class="result-search"
+                        placeholder="Buscar archivo..."
+                        autocomplete="off"
+                    >
+
+
+                    <div
+                        id="validFilesList"
+                        class="result-list"
+                    >
+
+                        <div class="list-empty">
+                            No hay archivos correctos.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     DETALLE
+                =================================== -->
+
+                <div class="results-column detail-column">
+
+                    <div class="column-header">
+
+                        <h3>
+                            DETALLE
+                        </h3>
+
+                    </div>
+
+
+                    <div
+                        id="resultDetail"
+                        class="result-detail"
+                    >
+
+                        <div class="detail-empty">
+
+                            <div class="detail-empty-icon">
+                                XML
+                            </div>
+
+
+                            <p>
+                                Selecciona un archivo para
+                                consultar el resultado.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ==================================
+                         SEMÁFORO DE REFERENCIA
+                    =================================== -->
+
+                    <div class="validation-legend">
+
+                        <div class="validation-legend-title">
+                            Referencia de colores
+                        </div>
+
+
+                        <div class="validation-legend-items">
+
+
+                            <!-- ROJO -->
+
+                            <div class="validation-legend-item">
+
+                                <span
+                                    class="legend-dot legend-red"
+                                ></span>
+
+
+                                <span>
+
+                                    <strong>
+                                        Error
+                                    </strong>
+
+                                    — La regla no se cumple.
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- AMARILLO -->
+
+                            <div class="validation-legend-item">
+
+                                <span
+                                    class="legend-dot legend-yellow"
+                                ></span>
+
+
+                                <span>
+
+                                    <strong>
+                                        Revisión manual
+                                    </strong>
+
+                                    — El sistema detecta una posible
+                                    situación que debe revisarse.
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- VERDE -->
+
+                            <div class="validation-legend-item">
+
+                                <span
+                                    class="legend-dot legend-green"
+                                ></span>
+
+
+                                <span>
+
+                                    <strong>
+                                        Correcto
+                                    </strong>
+
+                                    — No se encontraron errores.
+
+                                </span>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==========================================
+         VERSIÓN
+    =========================================== -->
+
+    <footer class="app-version">
+        V1.5.0
+    </footer>
+
+
+    <!-- ==========================================
+         VISOR XML
+         NO MODIFICAR
+    =========================================== -->
+
+    <div
+        id="xmlModal"
+        class="xml-modal"
+        aria-hidden="true"
+    >
+
+        <!-- Capa de fondo -->
+
+        <div
+            class="xml-modal-overlay"
+            aria-hidden="true"
+        ></div>
+
+
+        <!-- Ventana -->
+
+        <div
+            class="xml-modal-window"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="xmlModalTitle"
+        >
+
+
+            <!-- ==================================
+                 ENCABEZADO DEL VISOR
+            =================================== -->
+
+            <div class="xml-modal-header">
+
+                <div class="xml-modal-heading">
+
+                    <span class="xml-modal-icon">
+                        XML
+                    </span>
+
+
+                    <div class="xml-modal-heading-text">
+
+                        <span class="xml-modal-label">
+                            VISOR XML
+                        </span>
+
+
+                        <div
+                            id="xmlModalTitle"
+                            class="xml-modal-title"
+                        >
+                            Archivo XML
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="xmlModalClose"
+                    class="xml-modal-close"
+                    type="button"
+                    aria-label="Cerrar visor XML"
+                    title="Cerrar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- ==================================
+                 CUERPO
+            =================================== -->
+
+            <div class="xml-modal-body">
+
+                <div class="xml-code-wrapper">
+
+                    <div class="xml-code-toolbar">
+
+                        <span class="xml-code-status">
+                            Contenido del archivo
+                        </span>
+
+                        <span class="xml-code-hint">
+                            ESC para cerrar
+                        </span>
+
+                    </div>
+
+
+                    <pre
+                        id="xmlModalContent"
+                        class="xml-modal-content"
+                    ></pre>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================
+                 PIE
+            =================================== -->
+
+            <div class="xml-modal-footer">
+
+                <div class="xml-modal-footer-info">
+
+                    <span class="xml-footer-dot"></span>
+
+                    <span>
+                        Vista rápida del archivo XML
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="xmlModalCloseButton"
+                    class="btn-clear"
+                    type="button"
+                >
+                    CERRAR
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         MODAL REGLAS DE VALIDACIÓN
+    =========================================== -->
+
+    <div
+        id="validationRulesModal"
+        class="validation-rules-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="validationRulesModalTitle"
+    >
+
+        <div class="validation-rules-modal-window">
+
+
+            <!-- ENCABEZADO -->
+
+            <div class="validation-rules-modal-header">
+
+                <h2 id="validationRulesModalTitle">
+
+                    <span class="validation-rules-title-icon">
+                        ℹ️
+                    </span>
+
+                    REGLAS DE VALIDACIÓN
+
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="validation-rules-modal-close"
+                    id="validationRulesModalClose"
+                    aria-label="Cerrar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- CUERPO -->
+
+            <div class="validation-rules-modal-body">
+
+                <p class="validation-rules-intro">
+                    El sistema revisa los siguientes criterios:
+                </p>
+
+
+                <!-- ==================================
+                     REGLA 1
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            1. Datos del receptor
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            <strong>CP:</strong>
+                            33116
+                        </p>
+
+                        <p>
+                            <strong>Régimen fiscal del receptor:</strong>
+                            601 – General de Ley de Personas Morales
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 2
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            2. Método y forma de pago
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            <strong>PPD:</strong>
+                            la forma de pago debe ser
+                            99 – Por definir.
+                        </p>
+
+                        <p>
+                            <strong>PUE:</strong>
+                            si el total es menor a $2,000 MXN,
+                            se permiten las formas
+                            01, 02, 03, 04 y 28.
+                        </p>
+
+                        <p>
+                            Si el total es igual o mayor a $2,000 MXN,
+                            se permiten las formas
+                            02, 03, 04 y 28.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 3
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            3. Objeto de impuesto
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            Cada concepto debe contener el atributo
+                            <strong>ObjetoImp</strong>.
+                        </p>
+
+                        <p>
+                            Si falta o está vacío, se considera incorrecto.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 4
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            4. RESICO
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            Si el emisor es persona física y tiene el régimen
+                            <strong>
+                                626 – Régimen Simplificado de Confianza (RESICO)
+                            </strong>,
+                            cada concepto debe tener retención de ISR
+                            <strong>001</strong>.
+                        </p>
+
+                        <p>
+                            La retención debe corresponder al
+                            <strong>1.25%</strong>
+                            de la base del concepto.
+                        </p>
+
+                        <p>
+                            Si falta o es incorrecta, se marca como error.
+                        </p>
+
+                        <p>
+                            Si el concepto no tiene IVA, se requiere
+                            <strong>revisión manual</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 5
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            5. Carta Porte y transporte
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            Si existe complemento de
+                            <strong>Carta Porte</strong>,
+                            se busca identificar un concepto de servicio
+                            de transporte.
+                        </p>
+
+                        <p>
+                            Si se identifica transporte, se requiere
+                            <strong>revisión manual</strong>
+                            para determinar si aplica una retención
+                            de IVA del 4%.
+                        </p>
+
+                        <p>
+                            Si existe Carta Porte pero no se puede identificar
+                            el transporte, también se requiere
+                            <strong>revisión manual</strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 6
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            6. Uso CFDI y modo de captura
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            <strong>Modo Almacén activo:</strong>
+                            CFDI G01 – Adquisición de mercancías
+                            y tipo interno P.
+                        </p>
+
+                        <p>
+                            <strong>Modo Almacén inactivo:</strong>
+                            CFDI G03 – Gastos en general
+                            y tipo interno A.
+                        </p>
+
+                        <p>
+                            Cualquier otro uso de CFDI se considera incorrecto.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================================
+                     REGLA 7
+                =================================== -->
+
+                <div class="validation-rule-item">
+
+                    <button
+                        type="button"
+                        class="validation-rule-toggle"
+                    >
+
+                        <span>
+                            7. Uso CFDI I01 – Construcciones
+                        </span>
+
+                        <span class="validation-rule-arrow">
+                            ▸
+                        </span>
+
+                    </button>
+
+
+                    <div class="validation-rule-content">
+
+                        <p>
+                            Revisión manual para confirmar que la operación
+                            corresponde a una adquisición de activo fijo.
+                        </p>
+
+                        <p>
+                            También se debe confirmar que fue capturada mediante
+                            <strong>
+                                Compras → Entrada activo fijo
+                            </strong>.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PIE -->
+
+            <div class="validation-rules-modal-footer">
+
+                <button
+                    type="button"
+                    class="validation-rules-modal-close-button"
+                    id="validationRulesModalCloseButton"
+                >
+                    CERRAR
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
+    <script src="/js/app.js"></script>
+
+</body>
+
+</html>

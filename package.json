@@ -1,0 +1,25 @@
+{
+  "name": "validadorxml",
+  "version": "1.0.0",
+  "description": "Validador de archivos XML",
+  "main": "server.js",
+  "scripts": {
+    "check": "node --check server.js && node --check services/xmlparser.js && node --check services/xmlNormalizer.js && node --check services/validator.js",
+    "test": "npm run check",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "fast-xml-parser": "^5.10.1",
+    "multer": "^2.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
